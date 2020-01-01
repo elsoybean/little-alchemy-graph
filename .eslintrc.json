@@ -1,0 +1,65 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["eslint:recommended", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "modules": true,
+      "jsx": true
+    }
+  },
+  "plugins": ["flowtype", "import", "class-property"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "jquery": true
+  },
+  "rules": {
+    "complexity": [1, 20],
+    "quotes": 0,
+    "no-console": 0,
+    "no-debugger": 1,
+    "no-var": 1,
+    "no-useless-escape": 0,
+    "no-trailing-spaces": 0,
+    "eol-last": 0,
+    "no-param-reassign": 1,
+    "no-unused-vars": [1, { "argsIgnorePattern": "^_.*_$" }],
+    "no-underscore-dangle": 0,
+    "no-alert": 0,
+    "no-lone-blocks": 0,
+    "radix": 1,
+    "flowtype/define-flow-type": 1,
+    "flowtype/use-flow-type": 1,
+    "flowtype/require-valid-file-annotation": [2, "always"],
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "all"
+      }
+    ],
+    "import/extensions": [
+      1,
+      {
+        "js": "never",
+        "json": "always"
+      }
+    ],
+    "import/no-unresolved": 1
+  },
+  "globals": {
+    "Promise": true,
+    "Set": true,
+    "Proxy": true,
+    "Reflect": true
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.js", "**/test/**/*"],
+      "rules": {
+        "flowtype/require-valid-file-annotation": 0
+      }
+    }
+  ]
+}

@@ -61,7 +61,8 @@ query {
 }
 ```
 
-**Results:**
+**Result:**
+
 ![Basic Query Results](https://i.imgur.com/IV0ahWw.png)
 
 ### Element Detail
@@ -83,4 +84,5 @@ query($element:string) {
 _Note that Ratel does not support parameterized queries, so you will have to manually replace `$element` with a string like `"airplane"`_
 
 **Result:**
+
 ![Detail Query Result](https://i.imgur.com/LNfyMBw.png)

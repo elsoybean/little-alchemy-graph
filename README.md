@@ -40,6 +40,43 @@ type Combination {
 
 The schema is added to the graph database with an alter operation before we begin populating the database.
 
+## Upsert
+
+The script handles adding all of the nodes and edges to the graphs, but it is worth examining how it does so. It uses an **upsert** request consisting of a **query** block and a list of **mutation**s. The mutations can reference nodes found in the query block, so we do not unnecessarily create nodes that already exist.
+
+```
+upsert {
+    query($a:string, $b:string, $c:string) {
+        a as var(func:eq(name,$a))
+        b as var(func:eq(name,$b))
+        c as var(func:eq(name,$c))
+        cmb as var(func:has(created)) @cascade {
+            a: ~used_by @filter(uid(a))
+            b: ~used_by @filter(uid(b))
+            created @filter(uid(c))
+        }
+    }
+    mutation {
+        set {
+            uid(a) <name> "name-of-element-a" .
+            uid(a) <dgraph.type> "Element" .
+            uid(a) <used_by> uid(cmb) .
+            uid(b) <name> "name-of-element-b" .
+            uid(b) <dgraph.type> "Element" .
+            uid(b) <used_by> uid(cmb) .
+            uid(c) <name> "name-of-element-c" .
+            uid(c) <dgraph.type> "Element" .
+            uid(cmb) <created> uid(c) .
+            uid(cmb) <dgraph.type> "Combination" .
+        }
+    }
+}
+```
+
+This upsert block models the relationship between two Elements, `$a` and `$b`, that combine to create a third, `$c`. You can see that in the query block, we first search for existing Elements with the names matching the passed parameters. This lets us reference the existing (or newly created) node with `uid(a)` in the mutation block. We also find any existing Combination with these three Elements so that we update it rather than create a new one if the script is run multiple times.
+
+In the mutation block, we set the predicates of each Element node and the Combination node. The only scalar value predicate is `name` on the Element, but relationships are set the same way (the `used_by` and `created` predicates). The `dgraph.type` predicate is a special predicate to set type(s) for a node.
+
 ## Queries
 
 To query the graph, you can use the built-in Dgraph Ratel interface running at http://localhost:8000/

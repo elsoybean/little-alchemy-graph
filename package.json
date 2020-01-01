@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src/ -d lib/",
+    "docker-compose": "docker-compose -f ./docker-compose.yml",
     "prestart": "npm run build",
     "start": "node lib/index.js",
     "lint": "eslint src"
